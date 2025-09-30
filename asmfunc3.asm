@@ -1,32 +1,38 @@
+; Vector Triad SIMD AVX2 assembly language using YMM register
+
 section .text
 bits 64
 default rel
 global vectriad_SIMDy
 
 vectriad_SIMDy:
-    push rbp
+    ; clear out registers
+	xor rbx, rbx
+	xor rsi, rsi
+
+	; obtain 5th parameter from stack
+	push rbp
 	mov rbp, rsp
 	add rbp, 16
-	
-	xor rax, rax
-	mov rax, [rbp+32]
-	
+	mov rbx, [rbp+32]
 	pop rbp
 
-    add rcx, 7 ; boundary condition
-    shr rcx, 3 ; divide it by 8
+    ; divide rcx by 8 with boundary condition
+    add rcx, 7
+    shr rcx, 3
 
 L1:
-    vmovdqu ymm1, [r8]
-    vmovdqu ymm2, [r9]
-    vmovdqu ymm3, [rax]
+    ; transfer address of arrays to registers
+    vmovdqu ymm1, [r8+rsi*4]
+    vmovdqu ymm2, [r9+rsi*4]
+    vmovdqu ymm3, [rbx+rsi*4]
+
+    ; perform vector triad operation
     vmulps ymm0, ymm2, ymm3
     vaddps ymm0, ymm0, ymm1
-    vmovdqu [rdx], ymm0
-    add r8, 32           
-    add r9, 32
-    add rax, 32
-    add rdx, 32
-    loop L1               
+    vmovdqu [rdx+rsi*4], ymm0
+    
+    inc rsi
+    loop L1
 
     ret
