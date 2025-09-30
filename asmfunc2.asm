@@ -1,9 +1,9 @@
 section .text
 bits 64
 default rel
-global vecaddSIMDx
+global vectriad_SIMDx
 
-vecaddSIMDx:
+vectriad_SIMDx:
     push rbp
 	mov rbp, rsp
 	add rbp, 16

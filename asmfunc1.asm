@@ -3,9 +3,9 @@
 section .text
 bits 64
 default rel
-global vector_triad_x86_64
+global vectriad_x86_64
 
-vector_triad_x86_64:
+vectriad_x86_64:
 	push rbp
 	mov rbp, rsp
 	add rbp, 16
@@ -16,7 +16,7 @@ vector_triad_x86_64:
 	pop rbp
 L1:
 	; transfer address of arrays to registers
-	vmovss xmm1, [r8+rcx*4]
+	vmovss xmm1, [r8]
 	vmovss xmm2, [r9]
 	vmovss xmm3, [rax]
 
