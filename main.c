@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <time.h>
+#include <math.h>
 
 void vectriad_C(size_t n, float* a, float* b, float* c, float* d) {
     int i;
     for (i = 0; i < n; i++)
         a[i] = b[i] + c[i] * d[i];
 }
-extern vectriad_x86_64(size_t n, float* a, float* b, float* c, float* d);
-extern vectriad_SIMDx(size_t n, float* a, float* b, float* c, float* d);
-extern vectriad_SIMDy(size_t n, float* a, float* b, float* c, float* d);
+extern void vectriad_x86_64(size_t n, float* a, float* b, float* c, float* d);
+extern void vectriad_SIMDx(size_t n, float* a, float* b, float* c, float* d);
+extern void vectriad_SIMDy(size_t n, float* a, float* b, float* c, float* d);
 
 int main() {
     printf("------------| Vector Triad |----------------\n");
@@ -64,7 +65,7 @@ int main() {
         size_t i;
 
         printf("\n------------| Main Program |----------------\n");
-        printf("\Vector Size = 2^%d or %zd\n", n_sizes[ctr], ORIGINAL_ARRAY_SIZE);
+        printf("\nVector Size = 2^%d or %zd\n", n_sizes[ctr], ORIGINAL_ARRAY_SIZE);
         printf("Number of runs = 30. ");
         printf("Offset is added to total number of elements to check if program can handle boundary conditions.\n");
         printf("Offset for this vector size = %d. UPDATED Vector Size = %zd\n", offset, ARRAY_SIZE);
@@ -84,9 +85,11 @@ int main() {
 
         // Initialize arrays b, c, and d with some values
         for (int i = 0; i < ARRAY_SIZE; i++) {
+            a[i] = 0.0f; // Initialize a to 0.0f
             b[i] = sin(i * 0.05) + 0.5;
             c[i] = cos(i * 0.1) * 2.0;
             d[i] = sin(i * 0.02) * cos(i * 0.03);
+            sanity_check[i] = 0.0f; // Initialize sanity_check to 0.0f
         }
 
 		// Initialize array for all 30 runs to 0.0f for all kernel versions
@@ -109,10 +112,11 @@ int main() {
             QueryPerformanceCounter(&li);
             end = li.QuadPart;
             elapse = ((double)(end - start)) * 1000.0 / PCFreq;
-			c_times[run_ctr] = elapse;
+            c_times[run_ctr] = elapse;
 
             // Print first and last 5 values of a if it's the first run
             if (is_first) {
+                printf("Time in C = %f ms\n\n", elapse);
                 printf("Vector Triad C: PASSED\n");
                 printf("First 5 values of a[i]:\n");
                 for (i = 0; i < 5; i++) {
@@ -155,6 +159,7 @@ int main() {
                 x86_64_times[run_ctr] = elapse;
 
                 if (is_first) {
+                    printf("Time in x86-64 Assembly = %f ms\n\n", elapse);
                     printf("Vector Triad x86-64 Assembly: PASSED\n");
                     printf("First 5 values of a[i]:\n");
                     for (i = 0; i < 5; i++) {
@@ -194,6 +199,7 @@ int main() {
 				simdx_times[run_ctr] = elapse;
 
                 if (is_first) {
+					printf("Time in SIMD XMM = %f ms\n\n", elapse);
                     printf("Vector Triad SIMD XMM: PASSED\n");
                     printf("First 5 values of a[i]:\n");
                     for (i = 0; i < 5; i++) {
@@ -233,6 +239,7 @@ int main() {
 				simdy_times[run_ctr] = elapse;
                 
                 if (is_first) {
+					printf("Time in SIMD YMM = %f ms\n\n", elapse);
                     printf("Vector Triad SIMD YMM: PASSED\n");
                     printf("First 5 values of a[i]:\n");
                     for (i = 0; i < 5; i++) {
@@ -250,7 +257,7 @@ int main() {
 			// Reset is_first flag after the first run
             if (is_first) {
                 is_first = 0;
-            }
+            }	
         }
 
 		// Visualize all times, then add and calculate average time for each kernel version
@@ -273,6 +280,7 @@ int main() {
 		simdx_average_times[ctr] = simdx_avg / runs;
 		simdy_average_times[ctr] = simdy_avg / runs;
 
+        // Free allocated memory
         free(a);
         free(b);
         free(c);

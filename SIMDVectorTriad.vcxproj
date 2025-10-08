@@ -130,6 +130,8 @@
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\nasm\nasm -fwin64 asmfunc1.asm</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">asmfunc1.obj</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\nasm\nasm -fwin64 asmfunc1.asm</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">asmfunc1.obj</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +139,8 @@
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\nasm\nasm -fwin64 asmfunc2.asm</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">asmfunc2.obj</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\nasm\nasm -fwin64 asmfunc2.asm</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">asmfunc2.obj</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +148,8 @@
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\nasm\nasm -fwin64 asmfunc3.asm</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">asmfunc3.obj</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\nasm\nasm -fwin64 asmfunc3.asm</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">asmfunc3.obj</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
