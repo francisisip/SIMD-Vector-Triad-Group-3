@@ -1,6 +1,14 @@
 # CSC612M SIMD Programming Project: Vector Triads
 G01 Francis Bawa, Enrique Lejano, Luis Roxas
 
+## Given Problem
+
+Implement the vector triad operation using (1) C program; (2) an x86-64 assembly language; (3) x86-64 SIMD AVX2 assembly language using XMM register; (4) x86-64 SIMD AVX2 assembly language using YMM register.
+
+The formula for the vector triad operation is defined as:
+
+`a[i] = b[i] + c[i] * d[i]`
+
 ## Code Documentation
 
 **Input**
@@ -85,6 +93,8 @@ A snippet of the correctness check code is seen below, followed by outputs durin
 
 ### Performance Observations
 
+It can be observed that the decrease in execution time going from C to x86-64 to SIMD using XMM and then finally SIMD using YMM. The execution times from C to SIMD using the XMM and YMM registers saw more than a 3x improvement for both Debug and Release modes. Therefore, we can conclude that SIMD YMM (and assembly implementation in general) is much faster than optimized C.
+
 **C Implementation:**
 AHA! The C code exhibits significant performance improvements in Release mode, with speedups of up to 3.28 times across the various vector sizes. This shows the significant improvements Visual Studio’s compiler can make when optimizations are enabled. In Debug mode, the compiler preserves the code structure for debugging purposes and disables these optimizations. For instance, the stack trace may be made visible in the Debug mode, while Release mode doesn’t have that option.
 
@@ -107,7 +117,3 @@ While programming the Vector Triad in C was simple, since we only had to copy/pa
 The next problem we encountered was realizing that some registers we were using in our code were callee-saved. This meant that the values stored in these registers needed to be preserved across calls, and if we were ever going to use them, we needed to push and pop these registers. To avoid this problem, we simply used other registers that were volatile (caller-saved) since these registers only hold temporary information and can easily be overwritten. The next challenge we encountered was for our SIMD with XMM registers and SIMD with YMM registers implementations. For these implementations, if the value of the vector size had extra elements, it would lead to remainders that had to be addressed independently. Our first solution to handle the boundary conditions was to simply add 3 or 7 to the total number of elements in our XMM and YMM implementations, respectively, so that the program would simply do one extra calculation. However, this caused multiple crashes because the program was writing to memory addresses beyond the allocated array size. To solve this problem, we instead implemented one more loop after the main loop that goes through each remainder one by one and solved these independently.
 
 The final problem we encountered was when we were about to run our main program in RELEASE mode, and encountered a crash despite the program running smoothly in DEBUG mode. After multiple runs, sometimes the program compiled successfully but with garbage values, and sometimes it simply exited the program with an error. We realized that the fix to our problem was to initialize our output (a[n]) and sanity_check array with 0.0, because these garbage values affected the results of our program.
-
-- [ ] AHA 
-	- [ ] Big improvement from C to YMM
-	- [ ] memory bound or compute bound?
