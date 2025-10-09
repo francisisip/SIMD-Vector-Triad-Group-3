@@ -40,13 +40,20 @@ Following the formulas above, the vectors have the following first few values (r
 ### Average Execution Times (Release)
 <img width="754" height="162" alt="a 7" src="https://github.com/user-attachments/assets/79b3797a-f550-4472-8135-d2c53306613e" />
 
-### Correctness Check (C)
+### Snippet of complete execution times (from Debug)
+<img width="576" height="702" alt="a 4" src="https://github.com/user-attachments/assets/a5acdfb2-9ce2-400d-8daa-11c266b2299f" />
 
-### Correctness Check (SIMD XMM Register)
+### Output and Correctness Check (C from Debug)
+<img width="409" height="349" alt="c 1" src="https://github.com/user-attachments/assets/36e51bc9-34d2-4134-a82a-86ee556628d8" />
 
-### Correctness Check (SIMD YMM Register)
+### Output and Correctness Check (x86-64 from Debug)
+<img width="613" height="356" alt="d 1" src="https://github.com/user-attachments/assets/5ee644e0-2244-432a-bbb8-948d2a8e6047" />
 
-### Boundary Check
+### Output and Correctness Check (SIMD XMM Register from Debug)
+<img width="553" height="346" alt="e 1" src="https://github.com/user-attachments/assets/ef21b21f-8557-43ed-aa3d-f84ac9f970af" />
+
+### Output and Correctness Check (SIMD YMM Register from Debug)
+<img width="550" height="359" alt="f 1" src="https://github.com/user-attachments/assets/8cafb684-8b8a-4779-b972-af0ef723c274" />
 
 ### Performance Comparison: Debug vs Release
 
@@ -73,8 +80,20 @@ TODO: Replace with Luis explanations
 - **x86-64 kernel:** Shows decent improvements (10–15% faster).  
 - **SIMD kernels (XMM/YMM):** Performance is nearly identical or slightly slower in Release mode, indicating that SIMD code is already highly optimized.
 
-## Discussion
+### Boundary Check
 
+#### SIMD with XMM Registers Boundary Check (by adding 3 extra elements)
+<img width="1068" height="168" alt="g 1" src="https://github.com/user-attachments/assets/2684ef81-ca3e-4c29-8506-49f1481684da" />
+<img width="557" height="725" alt="g 2" src="https://github.com/user-attachments/assets/443f8f4e-d5f3-411d-8f7d-a4a76ea7bdb3" />
+
+#### SIMD with YMM Registers Boundary Check (by adding extra 7 elements)
+<img width="1062" height="158" alt="g 3" src="https://github.com/user-attachments/assets/bc03ad81-9741-4c2b-8bea-e6543aa296e2" />
+<img width="573" height="716" alt="g 4" src="https://github.com/user-attachments/assets/75c0483c-7957-4997-8793-040285a11396" />
+
+
+## Discussion
+- [ ] Output and correctness check that we're showing is for 2^20. ON the other hand, we use 2^26 and 2^28 to do the boundary checks.
+- [ ] How we did correctness check: Add explanation that we used C as the ground truth. Stored in sanity_check array. Then all other kernel versions' arrays are compared agianst sanity_check.
 - [ ] Problems Encountered
 - [ ] Solutions Made
 - [ ] Unique Methodology
@@ -83,3 +102,4 @@ TODO: Replace with Luis explanations
 	- [ ] memory bound or compute bound?
 	- [ ] debug versus release
 	- [ ] simd ymm faster than optimized C?
+- [ ] B
