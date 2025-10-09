@@ -7,9 +7,18 @@ G01 Francis Bawa, Enrique Lejano, Luis Roxas
 - `ARRAY_SIZE` = length of vectors. 
 - Arrays `b`, `c`, `d` containing single-precision floating point numbers.
 
-The values for each vector are initialized using the following code block:
+Vector value initialization logic:
 
 <img width="481" height="173" alt="vector initialization" src="https://github.com/user-attachments/assets/ad50a378-36f7-487f-97cd-5bb1c7f465f1" />
+
+Each vector (`b`, `c`, `d`) is initialized using trigonometric expressions to create oscillating and non-linear data patterns. These ensure that computations involve realistic and non-constant values for benchmarking.
+
+| **Term** | **Range** | **Reason** |
+|-----------|------------|------------|
+| `sin(i * 0.05)` | `[-1, 1]` | Sine function oscillates between -1 and 1 |
+| `+ 0.5` | shifts range to `[-0.5, 1.5]` | Adds offset; `b[i]` can be slightly negative |
+| `cos(i * 0.1) * 2.0` | `[-2, 2]` | Cosine oscillates and is scaled by 2 |
+| `sin(i * 0.02) * cos(i * 0.03)` | approximately `[-1, 1]` | Product of two oscillating trigonometric functions |
 
 Following the formulas above, the vectors have the following first few values (rounded to 4 decimal places):
 - `b` = [0.5, 0.5400, 0.5998, ...]
