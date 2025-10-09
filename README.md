@@ -43,16 +43,27 @@ Following the formulas above, the vectors have the following first few values (r
 ### Snippet of complete execution times (from Debug)
 <img width="576" height="702" alt="a 4" src="https://github.com/user-attachments/assets/a5acdfb2-9ce2-400d-8daa-11c266b2299f" />
 
-### Output and Correctness Check (C from Debug)
+## Output and Correctness Check
+To perform the correctness check, we first stored the outputs of the C kernel in an array `sanity_check`. This served as the ground truth for the rest of the kernels. Then, when each kernel completes their calculations, each element in their array `a` is compared with the corresponding indexed element in `sanity_check`. The result of this check is reflected in either a `PASSED` or `FAILED` output.
+
+In all the screenshots below, the correctness checks passed. This can be verified by inspecting the first and last five elements of all the output arrays. 
+
+For readability's sake, the _printing_ of the `PASSED` or `FAILED` output, along with the first and last five elements, is only done on the first of the thirty iterations.
+
+A snippet of the correctness check code is seen below, followed by outputs during the run.
+<img width="414" height="161" alt="image" src="https://github.com/user-attachments/assets/e3e449c6-1126-4c5b-aa15-f37e48561929" />
+
+#### C from Debug
+ 
 <img width="409" height="349" alt="c 1" src="https://github.com/user-attachments/assets/36e51bc9-34d2-4134-a82a-86ee556628d8" />
 
-### Output and Correctness Check (x86-64 from Debug)
+#### x86-64 from Debu)
 <img width="613" height="356" alt="d 1" src="https://github.com/user-attachments/assets/5ee644e0-2244-432a-bbb8-948d2a8e6047" />
 
-### Output and Correctness Check (SIMD XMM Register from Debug)
+#### SIMD XMM Register from Debug
 <img width="553" height="346" alt="e 1" src="https://github.com/user-attachments/assets/ef21b21f-8557-43ed-aa3d-f84ac9f970af" />
 
-### Output and Correctness Check (SIMD YMM Register from Debug)
+### SIMD YMM Register from Debug
 <img width="550" height="359" alt="f 1" src="https://github.com/user-attachments/assets/8cafb684-8b8a-4779-b972-af0ef723c274" />
 
 ### Performance Comparison: Debug vs Release
@@ -74,11 +85,11 @@ Following the formulas above, the vectors have the following first few values (r
 
 ### Performance Observations
 
-TODO: Replace with Luis explanations
+**C Implementation:**
+AHA! The C code exhibits significant performance improvements in Release mode, with speedups of up to 3.28 times across the various vector sizes. This shows the significant improvements Visual Studio’s compiler can make when optimizations are enabled. In Debug mode, the compiler preserves the code structure for debugging purposes and disables these optimizations. For instance, the stack trace may be made visible in the Debug mode, while Release mode doesn’t have that option.
 
-- **C kernel:** Gains the most from Release mode (3× faster across all array lengths).  
-- **x86-64 kernel:** Shows decent improvements (10–15% faster).  
-- **SIMD kernels (XMM/YMM):** Performance is nearly identical or slightly slower in Release mode, indicating that SIMD code is already highly optimized.
+**Assembly Implementations:**
+The assembly implementations (x86-64, SIMD XMM and YMM) show nearly identical performance between Debug and Release modes, with very slight performance differences. This is to be expected, as the assembly code isn’t included in Visual Studio’s optimization pipeline and is built directly as it was written. Of course, the build configuration may affect how the assembler processes the code, but it doesn’t apply the same optimizations as the C counterparts. Regardless of build mode, both SIMD implementations remain faster than the C version.​​​​​​​​​​​​​​​​
 
 ### Boundary Check
 
@@ -90,16 +101,13 @@ TODO: Replace with Luis explanations
 <img width="1062" height="158" alt="g 3" src="https://github.com/user-attachments/assets/bc03ad81-9741-4c2b-8bea-e6543aa296e2" />
 <img width="573" height="716" alt="g 4" src="https://github.com/user-attachments/assets/75c0483c-7957-4997-8793-040285a11396" />
 
-
 ## Discussion
-- [ ] Output and correctness check that we're showing is for 2^20. ON the other hand, we use 2^26 and 2^28 to do the boundary checks.
-- [ ] How we did correctness check: Add explanation that we used C as the ground truth. Stored in sanity_check array. Then all other kernel versions' arrays are compared agianst sanity_check.
-- [ ] Problems Encountered
-- [ ] Solutions Made
-- [ ] Unique Methodology
+While programming the Vector Triad in C was simple, since we only had to copy/paste the formula into the function, we encountered multiple problems and hiccups while developing the other kernel versions. The first problem we encountered was optimizing our code to use the proper addressing modes taught in class, instead of incrementing each register manually at the end of the loop to move on to the next set of values. We kept running into bugs because our calculations were off until we figured out the proper values to increment the memory address for x86-64, SIMD with XMM registers, and SIMD with YMM registers. An AHA moment for us happened while implementing the SIMD with YMM registers because we realized the only thing we had to change was the registers from XMM to YMM, and the value of the register that handles the addressing of our memory. 
+
+The next problem we encountered was realizing that some registers we were using in our code were callee-saved. This meant that the values stored in these registers needed to be preserved across calls, and if we were ever going to use them, we needed to push and pop these registers. To avoid this problem, we simply used other registers that were volatile (caller-saved) since these registers only hold temporary information and can easily be overwritten. The next challenge we encountered was for our SIMD with XMM registers and SIMD with YMM registers implementations. For these implementations, if the value of the vector size had extra elements, it would lead to remainders that had to be addressed independently. Our first solution to handle the boundary conditions was to simply add 3 or 7 to the total number of elements in our XMM and YMM implementations, respectively, so that the program would simply do one extra calculation. However, this caused multiple crashes because the program was writing to memory addresses beyond the allocated array size. To solve this problem, we instead implemented one more loop after the main loop that goes through each remainder one by one and solved these independently.
+
+The final problem we encountered was when we were about to run our main program in RELEASE mode, and encountered a crash despite the program running smoothly in DEBUG mode. After multiple runs, sometimes the program compiled successfully but with garbage values, and sometimes it simply exited the program with an error. We realized that the fix to our problem was to initialize our output (a[n]) and sanity_check array with 0.0, because these garbage values affected the results of our program.
+
 - [ ] AHA 
 	- [ ] Big improvement from C to YMM
 	- [ ] memory bound or compute bound?
-	- [ ] debug versus release
-	- [ ] simd ymm faster than optimized C?
-- [ ] B
