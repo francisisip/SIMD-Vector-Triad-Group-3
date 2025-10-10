@@ -65,7 +65,7 @@ A snippet of the correctness check code is seen below, followed by outputs durin
  
 <img width="409" height="349" alt="c 1" src="https://github.com/user-attachments/assets/36e51bc9-34d2-4134-a82a-86ee556628d8" />
 
-#### x86-64 from Debu)
+#### x86-64 from Debug
 <img width="613" height="356" alt="d 1" src="https://github.com/user-attachments/assets/5ee644e0-2244-432a-bbb8-948d2a8e6047" />
 
 #### SIMD XMM Register from Debug
@@ -121,5 +121,5 @@ The final problem we encountered was when we were about to run our main program 
 Finally, we determined that this given problem—and our implementation—is _memory-bound_ rather than compute-bound. This is because for each iteration, the program performs only two floating-point operations (multiplication and addition) but requires four memory accesses: 3 reads (`b[i]`, `c[i]`, `d[i]`) and 1 write (`a[i]`).
 
 ## AI Declaration
-No AI systems were used to generate the code for problem-solving. AI tools were used solely to enhance the clarity, presentation, and technical accuracy of this report. Specifically, Grammarly was employed to refine grammar and wording, formatting tools were used to organize tables and layout, and AI assistance was utilized to generate a formula for producing randomized array values. No AI systems were used to create or influence the study’s findings or interpretations.
+No AI systems were used to generate code for problem-solving. AI tools were used solely to enhance the clarity, presentation, and technical accuracy of this report. Specifically, Grammarly was employed to refine grammar and wording, formatting tools were used to organize tables and layout, and AI assistance was utilized to generate a formula for producing randomized array values. No AI systems were used to create or influence the study’s findings or interpretations.
 
