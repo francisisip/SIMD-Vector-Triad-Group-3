@@ -119,3 +119,7 @@ The next problem we encountered was realizing that some registers we were using 
 The final problem we encountered was when we were about to run our main program in RELEASE mode, and encountered a crash despite the program running smoothly in DEBUG mode. After multiple runs, sometimes the program compiled successfully but with garbage values, and sometimes it simply exited the program with an error. We realized that the fix to our problem was to initialize our output (a[n]) and sanity_check array with 0.0, because these garbage values affected the results of our program.
 
 Finally, we determined that this given problem—and our implementation—is _memory-bound_ rather than compute-bound. This is because for each iteration, the program performs only two floating-point operations (multiplication and addition) but requires four memory accesses: 3 reads (`b[i]`, `c[i]`, `d[i]`) and 1 write (`a[i]`).
+
+## AI Declaration
+No AI systems were used to generate the code for problem-solving. AI tools were used solely to enhance the clarity, presentation, and technical accuracy of this report. Specifically, Grammarly was employed to refine grammar and wording, formatting tools were used to organize tables and layout, and AI assistance was utilized to generate a formula for producing randomized array values. No AI systems were used to create or influence the study’s findings or interpretations.
+
